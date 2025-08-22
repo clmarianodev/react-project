@@ -79,7 +79,7 @@ const Sidebar = () => {
                   alt="profle-user"
                   width="100px"
                   height="100px"
-                  scr={"../../assets/react.svg"}
+                  scr={"../../assets/default.jpg"}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
