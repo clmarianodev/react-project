@@ -59,25 +59,28 @@ const Sidebar = () => {
           alignItems: "center",
           marginRight: "5px",
         },
-        "& .pro-inner-item:hover": {
-          backgroundColor: "#fb8686ff !important",
-          color: "#fff !important",
-        },
+
         "& .pro-menu-item.active > .pro-inner-item": {
           backgroundColor: "#fa6868ff !important",
           color: "#fff !important",
+        },
+        "& .no-hover .pro-inner-item:hover": {
+          backgroundColor: "transparent !important",
+          color: "inherit !important",
         },
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* { logo and memu icon} */}
+
           <MenuItem
+            className="no-hover"
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
-              color: colors.grey[100],
+              color: colors.grey[100], // always consistent
             }}
           >
             {!isCollapsed && (
@@ -90,13 +93,14 @@ const Sidebar = () => {
                 <Typography variant="h3" color={colors.grey[100]}>
                   TOYOTA
                 </Typography>
-                <IconButton
-                  onClick={() => setIsCollapsed(!isCollapsed)}
-                ></IconButton>
-                <MenuOutlinedIcon />
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                  <MenuOutlinedIcon sx={{ color: colors.grey[100] }} />{" "}
+                  {/* force consistent color */}
+                </IconButton>
               </Box>
             )}
           </MenuItem>
+
           {/* user */}
           {!isCollapsed && (
             <Box mb="25px">
