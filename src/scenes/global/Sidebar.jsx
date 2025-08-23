@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -38,6 +38,29 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const location = useLocation();
+
+  // Map path -> menu title
+  const pathToTitle = {
+    "/": "Dashboard",
+    "/team": "Manage Team",
+    "/contacts": "Contacts Information",
+    "/invoices": "Invoices Balances",
+    "/form": "Profile Form",
+    "/calendar": "Calendar",
+    "/faq": "FAQ",
+    "/bar": "Bar Chart",
+    "/pie": "Pie Chart",
+    "/line": "Line Chart",
+    "/geography": "Geography Chart",
+  };
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    if (pathToTitle[currentPath]) {
+      setSelected(pathToTitle[currentPath]);
+    }
+  }, [location.pathname]);
 
   return (
     <Box
@@ -59,7 +82,16 @@ const Sidebar = () => {
           alignItems: "center",
           marginRight: "5px",
         },
-
+        "& .pro-inner-item:hover": {
+          backgroundColor:
+            theme.palette.mode === "dark"
+              ? `${colors.primary[500]} !important`
+              : `${colors.primary[900]} !important`,
+          color:
+            theme.palette.mode === "dark"
+              ? "#ffffffff !important"
+              : "inherit !important",
+        },
         "& .pro-menu-item.active > .pro-inner-item": {
           backgroundColor: "#fa6868ff !important",
           color: "#fff !important",
@@ -72,15 +104,14 @@ const Sidebar = () => {
     >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* { logo and memu icon} */}
-
+          {/* Logo + Collapse Menu */}
           <MenuItem
             className="no-hover"
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
-              color: colors.grey[100], // always consistent
+              color: colors.grey[100],
             }}
           >
             {!isCollapsed && (
@@ -90,23 +121,45 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h3" color={colors.grey[100]}>
-                  TOYOTA
-                </Typography>
+                <Box display="flex" alignItems="center">
+                  <Typography variant="h3" color={colors.grey[100]}>
+                    TOYOTA
+                  </Typography>
+                  <Box
+                    sx={{
+                      borderRadius: "50px",
+                      padding: "3px",
+                      marginLeft: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img
+                      src={"logo.png"}
+                      alt="Toyota Logo"
+                      style={{
+                        width: "35px",
+                        height: "25px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </Box>
+                </Box>
+
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                  <MenuOutlinedIcon sx={{ color: colors.grey[100] }} />{" "}
-                  {/* force consistent color */}
+                  <MenuOutlinedIcon sx={{ color: colors.grey[100] }} />
                 </IconButton>
               </Box>
             )}
           </MenuItem>
 
-          {/* user */}
+          {/* User */}
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center ">
                 <img
-                  alt="profle-user"
+                  alt="profile-user"
                   width="100px"
                   height="100px"
                   src={"../../assets/default.jpg"}
@@ -128,7 +181,8 @@ const Sidebar = () => {
               </Box>
             </Box>
           )}
-          {/* menu items  */}
+
+          {/* Menu Items */}
           <Box paddingLeft={isCollapsed ? undefined : "10% "}>
             <Item
               title="Dashboard"
@@ -166,6 +220,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -194,6 +249,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
